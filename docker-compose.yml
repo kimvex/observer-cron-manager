@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  cronmanager:
+    image: cronmanager
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      CRON_STORE: /etc/cron.d/
+      NODE_BIN: /usr/bin/node
+      ENV_DATABASE: "mysql"
+    ports:
+      - 3000:3000
