@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const { front, api } = require('./api')
+const user_basic_created = require('./helpers/save-user-admin')
 console.log(require('./api'))
 const { PORT } = process.env
 
@@ -12,6 +13,8 @@ function InitializationServer() {
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
+
+  user_basic_created()
 
   app.use('/', front)
   app.use('/api', api)
