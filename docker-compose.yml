@@ -7,10 +7,12 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
       PORT: 3000
       CRON_STORE: /etc/cron.d/
       NODE_BIN: /usr/bin/node
       ENV_DATABASE: "sqlite3"
+    volumes:
+      - .:/usr/src/app
     ports:
       - 3000:3000

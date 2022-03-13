@@ -5,6 +5,7 @@ DES_MYSQL_NPM="./node_modules/mysql"
 DES_MYSQL2_NPM="./node_modules/mysql2"
 DES_POSTGRES_NPM="./node_modules/pg"
 DES_MONGODB_NPM="./node_modules/mongodb"
+DES_NODEMON_NPM="./node_modules/nodemon"
 
 if [ $ENV_DATABASE == "mysql" ]
 then
@@ -59,4 +60,10 @@ then
     fi
 fi
 
-node index.js
+if [ $NODE_ENV == "development" ]
+then
+    npm install nodemon -g
+    nodemon index.js
+else
+    node index.js
+fi
