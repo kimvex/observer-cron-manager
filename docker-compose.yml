@@ -11,7 +11,7 @@ services:
       PORT: 3000
       CRON_STORE: /etc/cron.d/
       NODE_BIN: /usr/bin/node
-      ENV_DATABASE: "sqlite3"
+      ENV_DATABASE: "sqlite"
     volumes:
       - .:/usr/src/app
     ports:
