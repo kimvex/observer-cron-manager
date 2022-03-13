@@ -1,5 +1,7 @@
 # Observer Cron Manager
 
+##### - BETA
+
 Observer cron manage work using system of cronjob by linux for create taks with time of execution. This project allow you schelude request to endpoints remote or locals, also execute local cronjobs for execute localfiles if install without docker. Also allow work with severals databases for save configurations and groups of crons.
 
 ## Installation
