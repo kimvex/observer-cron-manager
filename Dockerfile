@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "npm_database_package.sh", "./"]
 
 RUN npm install --production --silent
-
+RUN npm install knex -g
 
 COPY . .
 RUN chmod +x npm_database_package.sh

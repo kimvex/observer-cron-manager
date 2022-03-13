@@ -1,11 +1,12 @@
 #!/bin/bash
 
-DES_SQLITE_NPM="./node_modules/sqlite3"
+DES_SQLITE_NPM="./node_modules/better-sqlite3"
 DES_MYSQL_NPM="./node_modules/mysql"
 DES_MYSQL2_NPM="./node_modules/mysql2"
 DES_POSTGRES_NPM="./node_modules/pg"
 DES_MONGODB_NPM="./node_modules/mongodb"
 DES_NODEMON_NPM="./node_modules/nodemon"
+DATABASE_SQLITE_FILE="./db/$DATABASE_SQLITE"
 
 if [ $ENV_DATABASE == "mysql" ]
 then
@@ -18,8 +19,8 @@ then
 
     if [ ! -d "$DES_MYSQL_NPM" ]
     then
-        npm install mysql --save
-        npm install mysql2 --save
+        npm install mysql
+        npm install mysql2
     fi
 elif [ $ENV_DATABASE == "sqlite" ]
 then
@@ -30,7 +31,13 @@ then
 
     if [ ! -d "$DES_SQLITE_NPM" ]
     then
-        npm install sqlite3 --save
+        npm install @vscode/sqlite3
+        npm install better-sqlite3
+    fi
+
+    if [ ! -f "$DATABASE_SQLITE_FILE" ]
+    then
+        touch "$DATABASE_SQLITE_FILE"
     fi
 elif  [ $ENV_DATABASE == "postgres" ]
 then
@@ -41,7 +48,8 @@ then
 
     if [ ! -d "$DES_POSTGRES_NPM" ]
     then
-        npm install pg --save
+        npm install pg
+        npm install pg-native
     fi
 elif [ $ENV_DATABASE == "mongo" ]
 then
@@ -56,9 +64,11 @@ then
 
     if [ ! -d "$DES_MONGODB_NPM" ]
     then
-        npm install mongodb --save
+        npm install mongodb
     fi
 fi
+
+knex migrate:latest
 
 if [ $NODE_ENV == "development" ]
 then
