@@ -15,6 +15,10 @@ function validateSession(sol, res, next) {
 		}
 
 		if (valid) {
+			sol.user = {
+				user_id: valid.user_id,
+			}
+
 			return next();
 		}
 
