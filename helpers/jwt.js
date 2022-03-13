@@ -2,30 +2,34 @@
 
 const jwt = require('jsonwebtoken');
 
-const { SECRET_JWT } = process.env
+const { SECRET_JWT } = process.env;
 
-function generateToken() {
+const generateToken = (user_id) => {
 	const token = jwt.sign(
 		{
-			exp: Math.floor(Date.now() / 100000) + 5000 * 6000,
+			user_id,
 		},
-		SECRET_JWT
+		SECRET_JWT,
+		{ expiresIn: '48h' }
 	);
 
 	return token;
-}
+};
 
 function validate(token, cb) {
 	try {
 		const decoded = jwt.verify(token, SECRET_JWT);
 		if (decoded) {
-			return cb(true, null);
+			return cb(decoded, null);
 		}
 
-		return cb(false, null);
+		return cb(null, null);
 	} catch (err) {
-		return cb(false, err);
+		return cb(null, err);
 	}
 }
 
-module.exports = { generateToken, validate };
+module.exports = {
+	generateToken,
+	validate,
+};
