@@ -49,6 +49,24 @@ class Database {
       }
     }
   }
+
+  async createCronGroup(name, cron_groups_description, user_id) {
+    const db = await Database.db()
+    try {
+      const cron_group_id = await db('cron_groups').insert({name, cron_groups_description, user_id, cron_group_create_at: db.fn.now(), cron_groups_status: 'active'})
+
+      return {
+        error: null,
+        cron_group_id
+      }
+    } catch (error) {
+      console.log(`Error when create cron group with cron group data=${JSON.stringify({name, cron_groups_description, user_id})}: ${error}`)
+
+      return {
+        error: 'CANT_CREATE_CRON_GROUP'
+      }
+    }
+  }
 }
 
 module.exports = Database;
