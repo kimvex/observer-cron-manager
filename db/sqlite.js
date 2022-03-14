@@ -67,6 +67,32 @@ class Database {
       }
     }
   }
+
+  async getCronGroups(user_id, page, limit) {
+    const db = await Database.db()
+    try {
+      const cron_group_list = await db('cron_groups')
+        .select('cron_group_id', 'name', 'cron_groups_description', 'cron_group_create_at')
+        .where({
+          user_id,
+          cron_groups_status: 'active'
+        })
+        .orderBy('cron_group_create_at')
+        .limit(limit)
+        .offset(page * limit)
+
+      return {
+        error: null,
+        cron_group_list
+      }
+    } catch (error) {
+      console.log(`Error when get cron groups: ${error}`)
+
+      return {
+        error: 'CANT_GET_CRON_GROUPS'
+      }
+    }
+  }
 }
 
 module.exports = Database;
