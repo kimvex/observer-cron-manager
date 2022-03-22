@@ -93,6 +93,119 @@ class Database {
       }
     }
   }
+
+  async createCron({
+    cron_job_name, 
+    cron_job_description,
+    cron_job_expression,
+    cron_minute,
+    cron_hour,
+    cron_day,
+    cron_month,
+    cron_year,
+    type = 'URL',
+    url,
+    method,
+    headers,
+    body,
+    file,
+    cron_group_id
+  }) {
+    const db = await Database.db()
+    try {
+      const cron_job_id = await db('cron_jobs').insert({
+        cron_job_name, 
+        cron_job_description, 
+        cron_job_expression,
+        cron_minute,
+        cron_hour,
+        cron_day,
+        cron_month,
+        cron_year,
+        type,
+        url,
+        method,
+        headers,
+        body,
+        file,
+        cron_job_status: 'active',
+        cron_job_create_at: db.fn.now(),
+        cron_group_id
+      })
+
+      return {
+        error: null,
+        cron_job_id
+      }
+    } catch (error) {
+      console.log(`Error when create cron: ${error}`)
+
+      return {
+        error: 'CANT_CREATE_CRON'
+      }
+    }
+  }
+
+  // get name of cron group by cron group id
+  async getCronGroupName(cron_group_id) { 
+    const db = await Database.db()
+    try {
+      const cron_group_name = await db('cron_groups').select('name').where({ cron_group_id }).first()
+
+      return {
+        error: null,
+        cron_group_name
+      }
+    } catch (error) {
+      console.log(`Error when get cron group name: ${error}`)
+
+      return {
+        error: 'CANT_GET_CRON_GROUP_NAME'
+      }
+    }
+  }
+
+  async getAllCronByCronGroupId(cron_group_id) {
+    const db = await Database.db()
+    try {
+      const cron_list = await db('cron_jobs')
+        .select(
+          'cron_job_id', 
+          'cron_job_name', 
+          'cron_job_description', 
+          'cron_job_expression', 
+          'cron_minute', 
+          'cron_hour', 
+          'cron_day', 
+          'cron_month', 
+          'cron_year', 
+          'type', 
+          'url', 
+          'method', 
+          'headers', 
+          'body', 
+          'file', 
+          'cron_job_status', 
+          'cron_job_create_at'
+        )
+        .where({
+          cron_group_id,
+          cron_job_status: 'active'
+        })
+        .orderBy('cron_job_create_at')
+
+      return {
+        error: null,
+        cron_list
+      }
+    } catch (error) {
+      console.log(`Error when get all cron by cron group id: ${error}`)
+
+      return {
+        error: 'CANT_GET_ALL_CRON_BY_CRON_GROUP_ID'
+      }
+    }
+  }
 }
 
 module.exports = Database;
